@@ -827,8 +827,11 @@ def main():
                 else:
                     raise ValueError(f"Unknown prediction type {noise_scheduler.config.prediction_type}")
 
+                
+
                 # Predict the noise residual and compute loss
-                model_pred = unet(noisy_latents, timesteps, encoder_hidden_states, return_dict=False)[0]
+                # adding added_cond_kwargs = {} to prevent the code from running an error when training some models
+                model_pred = unet(noisy_latents, timesteps, encoder_hidden_states, return_dict=False, added_cond_kwargs={})[0]
 
                 if args.snr_gamma is None:
                     loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
